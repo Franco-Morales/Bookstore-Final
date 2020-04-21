@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit {
   uploadPercet: Observable <number> ;
   urlImage: Observable <string> ;
 
-  @ViewChild('imageUser',{static:false}) inputImageUser: ElementRef;
+  @ViewChild('imageUser') inputImageUser: ElementRef;
 
 
   constructor(private router: Router, private authService: AuthService, private storage: AngularFireStorage) {}
