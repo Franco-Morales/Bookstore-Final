@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
               displayName: '',
               photoURL: this.inputImageUser.nativeElement.value
             }).then( () =>{ 
-              this.router.navigate(['admin/list-book']); 
+              this.router.navigate(['/home']);
             }).catch( (error)=> { console.log('Error : ',error); });
           }
         });
@@ -73,14 +73,15 @@ export class RegisterComponent implements OnInit {
    * Login por Facebook
    */
   onLoginFacebook() {
-    // this.authService.loginFacebookUser()
-    // .then((resp)=>{
-    //   this.onLoginRedirect();
-    // }).catch( err=> console.log('err',err.message));
+    this.authService.loginFacebookUser()
+    .then((resp)=>{
+      this.onLoginRedirect();
+    }).catch( err=> console.log('err',err.message));
   }
 
   onLoginRedirect(): void {
-    this.router.navigate(['admin/list-book']);
+    // this.router.navigate(['admin/list-book']);
+    this.router.navigate(['/user/profile']);
   }
 
 }

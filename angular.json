@@ -24,13 +24,13 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.js",
-              "node_modules/popper.js/dist/umd/popper.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.js"
             ]
           },
@@ -125,6 +125,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "bookStore"
+    }
+  },
+  "defaultProject": "bookStore",
+  "cli": {
+    "analytics": "5fe09e5e-0f11-44b1-9157-070cbe7fddfa"
+  }
 }

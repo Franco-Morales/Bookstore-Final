@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataApiService } from "../../services/data-api.service";
 import { BookInterface } from "../../models/book";
+import { ActivatedRoute, Params } from "@angular/router";
 
 
 @Component({
@@ -10,13 +11,18 @@ import { BookInterface } from "../../models/book";
 })
 export class DetailsBookComponent implements OnInit {
 
-  public book: BookInterface;
+  public book: BookInterface = {};
 
-  constructor(private dataApi: DataApiService) { }
+  constructor(private dataApi: DataApiService, private route:ActivatedRoute) { }
 
   ngOnInit() {
-    const idBook = "bjZXxW4TZ0l3htLQag4C";
-    this.dataApi.getOneBook(idBook).subscribe( book=>{
+    const idBook = this.route.snapshot.params['id'];
+    this.getDetails(idBook);
+    
+  }
+
+  getDetails(idBook: string):void {
+    this.dataApi.getOneBook(idBook).subscribe( book => {
       console.log('Book : ',book);
       this.book = book;
     });

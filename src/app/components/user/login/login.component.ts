@@ -37,27 +37,26 @@ export class LoginComponent implements OnInit {
     .then((resp)=>{
       this.onLoginRedirect();
     }).catch( err => console.log('err',err.message));
-    
   }
 
   /**
    * Login por Facebook
    */
   onLoginFacebook(){
-    // this.authService.loginFacebookUser()
-    // .then((resp)=>{
-    //   this.onLoginRedirect();
-    // }).catch( err=> console.log('err',err.message));
+    this.authService.loginFacebookUser()
+    .then((resp)=>{
+      this.onLoginRedirect();
+    }).catch( err=> console.log('err',err.message));
   }
 
   /**
-   * 
+   * Logout function
    */
   onLogout(){
     this.authService.logoutUser();
   }
 
   onLoginRedirect(): void{
-    this.router.navigate(['admin/list-book']);
+    this.router.navigate(['/user/profile']);
   }
 }

@@ -11,7 +11,7 @@
               </p>
               <h4 routerLink="/book/{{book.id}}" class="card-title">{{book.titulo}}</h4>
               <p class="card-text">
-                {{book.descripcion}}
+                {{book.descripcion | slice: 0:100}}
               </p>
               <div class="container-precio-idioma">
                 <p class="badge badge-info mr-1">

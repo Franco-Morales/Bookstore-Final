@@ -1,6 +1,8 @@
-<p>offers works!</p>
-<!-- <section id="books">
+<!-- <p>offers works!</p> -->
+<section id="books">
+
   <div class="container">
+
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4" *ngFor="let book of books">
         <div class="card_book">
@@ -11,7 +13,7 @@
               </p>
               <h4 routerLink="/book/{{book.id}}" class="card-title">{{book.titulo}}</h4>
               <p class="card-text">
-                {{book.descripcion | truncateText:20}}
+                {{ description | slice: 0:100 }}
               </p>
               <div class="container-precio-idioma">
                 <p class="badge badge-info">
@@ -27,5 +29,7 @@
         </div>
       </div>
     </div>
+
   </div>
-</section> -->
+
+</section>

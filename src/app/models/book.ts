@@ -1,12 +1,14 @@
 export interface BookInterface {
     titulo?: string;
     idioma?: string;
-    desc?: string;
+    descripcion?: string;
     portada?: string;
     precio?: string;
-    link?: string;
+    link_amazon?: string;
     autor?: string;
     oferta?: string;
 
     id?: string;
+
+    userId?: string;
 }

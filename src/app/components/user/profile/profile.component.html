@@ -1,5 +1,5 @@
 <p>profile works!</p>
-<section id="profile" class="container">
+<section id="profile">
     <div class="row mt-5">
       <div class="offset-lg-4 col-lg-4 col-sm-6 col-12 main-section text-center card">
         <div class="row">
@@ -9,9 +9,7 @@
           <div class="col-12">
             <img src="{{user.photoUrl}}" class="rounded-circle img-thumbnail mt-3 mb-3" alt="profile">
             <h5 *ngIf="providerId != 'password'">{{user.name}}</h5>
-            <p>
-              {{user.email}}
-            </p>
+            <p>{{user.email}}</p>
             <hr>
             <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores suscipit itaque minima quae.</span>
           </div>
