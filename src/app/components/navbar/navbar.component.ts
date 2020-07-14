@@ -31,6 +31,6 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogout(){
-    this.afsAuth.auth.signOut();
+    this.afsAuth.signOut();
   }
 }

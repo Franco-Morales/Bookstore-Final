@@ -17,7 +17,7 @@ export class AuthService {
 
   registerUser(email: string, psw: string) {
     return new Promise( (resolve, reject) => {
-      this.afsAuth.auth.createUserWithEmailAndPassword(email, psw)
+      this.afsAuth.createUserWithEmailAndPassword(email, psw)
         .then( userData => {
           resolve(userData),
           this.updateUserData(userData.user)
@@ -25,40 +25,63 @@ export class AuthService {
     });
   }
 
+  async register(email: string, pass: string) {
+    try {
+      return await this.afsAuth.createUserWithEmailAndPassword(email,pass);
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
   loginEmailUser(email: string, pass: string) {
     return new Promise( (resolve, reject) => {
-      this.afsAuth.auth.signInWithEmailAndPassword(email, pass)
+      this.afsAuth.signInWithEmailAndPassword(email, pass)
         .then(userData => resolve(userData),
           err => reject(err));
     });
   }
 
-  // async login(email: string,pass: string) {
-  //   return null;
-  // }
-
-
-  loginFacebookUser() {
-    return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
-      .then( credential => this.updateUserData(credential.user) );
+  async login(email: string,pass: string) {
+    try {
+      return await this.afsAuth.signInWithEmailAndPassword(email,pass);
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
 
-  loginGoogleUser() {
-    return this.afsAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
-      .then( credential => this.updateUserData(credential.user) );
+  async loginFacebookUser() {
+    try {
+     let credential =  await this.afsAuth.signInWithPopup(new auth.FacebookAuthProvider());
+     console.log('credential', credential);
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
 
-  logoutUser() { return this.afsAuth.auth.signOut(); }
+  async loginGoogleUser() {
+    const credential = await this.afsAuth.signInWithPopup(new auth.GoogleAuthProvider());
+    return await this.updateUserData(credential.user);
+  }
 
+
+  logoutUser() { return this.afsAuth.signOut(); }
+
+  async logout() { 
+    try {
+      await this.afsAuth.signOut();
+    } catch (error) {
+      console.log('error', error)
+    }
+   }
 
   isAuth() {
     return this.afsAuth.authState.pipe( map( auth => auth ) );
   }
 
   private updateUserData(user){
+    
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.id}`);
 
     // Inicializar los usuarios como administradores
@@ -94,4 +117,5 @@ export class AuthService {
   isUserAdmin(userId){
     return this.afs.doc<UserInterface>(`users/${userId}`).valueChanges();
   }
+
 }

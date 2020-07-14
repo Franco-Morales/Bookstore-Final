@@ -23,10 +23,14 @@ export class LoginComponent implements OnInit {
    * Login por Email y Contraseña
    */
   onLogin(): void{
-    this.authService.loginEmailUser(this.email, this.psw)
-    .then((resp)=>{
-      this.onLoginRedirect();
-    }).catch( err => console.log('err',err.message));
+    // this.authService.loginEmailUser(this.email, this.psw)
+    // .then((resp)=>{
+    //   this.onLoginRedirect();
+    // }).catch( err => console.log('err',err.message));
+
+    this.authService.login(this.email, this.psw)
+      .then( resp => this.onLoginRedirect() )
+      .catch( error => console.log('error', error) )
   }
 
   /**
