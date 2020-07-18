@@ -13,8 +13,9 @@ export class AuthGuard implements CanActivate {
   constructor(private afsAuth: AngularFireAuth, private router: Router) { }
 
   canActivate(
-    next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      next: ActivatedRouteSnapshot,
+      state: RouterStateSnapshot 
+    ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // return true;
     return this.afsAuth.authState
     .pipe(take(1))

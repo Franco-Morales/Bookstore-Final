@@ -3,6 +3,9 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { auth } from "firebase/app";
 import { Router } from '@angular/router';
 import {  AuthService } from "../../../services/auth.service";
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+
 
 @Component({
   selector: 'app-login',
@@ -11,56 +14,73 @@ import {  AuthService } from "../../../services/auth.service";
 })
 export class LoginComponent implements OnInit {
 
-  public email:string = '';
-  public psw:string = '';
-  constructor(public afAuth: AngularFireAuth,private router: Router, private authService:AuthService) { }
+  // public email:string = '';
+  // public psw:string = '';
+  loginForm: FormGroup;
+
+  constructor(private router: Router, private authService:AuthService, private formBuilder: FormBuilder) { 
+    this.buildForm();
+  }
 
   ngOnInit() {
   }
 
-  
+  /**
+   * Form builder (async)
+   */
+  private buildForm(){
+    this.loginForm = this.formBuilder.group({
+      email: ['',[Validators.required, Validators.email]],
+      pswd: ['',[Validators.required]] //password
+    });
+  }
   /**
    * Login por Email y Contraseña
    */
-  onLogin(): void{
-    // this.authService.loginEmailUser(this.email, this.psw)
-    // .then((resp)=>{
-    //   this.onLoginRedirect();
-    // }).catch( err => console.log('err',err.message));
+  onLogin(event: Event){
+    event.preventDefault();
 
-    this.authService.login(this.email, this.psw)
-      .then( resp => this.onLoginRedirect() )
-      .catch( error => console.log('error', error) )
+    if(this.loginForm.valid){
+        this.authService.login(this.loginForm.value.email,this.loginForm.value.pswd)
+          .then( res => this.onLoginRedirect())
+          .catch( error => console.log('error', error))
+    } else {
+      this.loginForm.markAllAsTouched();
+    }
   }
 
-  /**
-   * Login por Google
-   */
-  onLoginGoogle(): void{
+  onLoginGoogle():void{
     this.authService.loginGoogleUser()
-    .then((resp)=>{
-      this.onLoginRedirect();
-    }).catch( err => console.log('err',err.message));
+      .then((res)=>{
+        this.onLoginRedirect();
+      })
+      .catch( error => console.log("err",error));
+    
   }
 
-  /**
-   * Login por Facebook
-   */
-  onLoginFacebook(){
+  onLoginFacebook(): void{
     this.authService.loginFacebookUser()
-    .then((resp)=>{
-      this.onLoginRedirect();
-    }).catch( err=> console.log('err',err.message));
+      .then((res)=>{
+        this.onLoginRedirect();
+      })
+      .catch( error => console.log("err",error));
   }
 
-  /**
-   * Logout function
-   */
+  
   onLogout(){
-    this.authService.logoutUser();
+    this.authService.logout();
   }
 
   onLoginRedirect(): void{
     this.router.navigate(['/user/profile']);
+  }
+
+
+  //Solo para las validaciones
+  get emailField(){
+    return this.loginForm.get('email');
+  }
+  get pswdField(){
+    return this.loginForm.get('pswd');
   }
 }

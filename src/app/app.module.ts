@@ -17,13 +17,14 @@ import { Page404Component } from './components/page404/page404.component';
 
 import { FormsModule } from "@angular/forms";
 
-import { environment } from "../environments/environment";
+import { environment } from '../environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
-import { AngularFireModule } from "@angular/fire";
-import { AngularFireDatabaseModule } from "@angular/fire/database";
-import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFireStorageModule } from "@angular/fire/storage";
-import { AngularFirestore } from "@angular/fire/firestore";
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -44,13 +45,13 @@ import { AngularFirestore } from "@angular/fire/firestore";
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireStorageModule
   ],
-  providers: [AngularFirestore],
+  providers: [AngularFirestore,AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -3,7 +3,7 @@ import { DataApiService } from '../../../services/data-api.service';
 import { BookInterface } from '../../../models/book';
 import { NgForm } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from 'src/app/models/user';
+import { User } from 'src/app/models/user.interface';
 import { AuthService } from '../../../services/auth.service';
 
 
@@ -19,6 +19,7 @@ export class ListBooksComponent implements OnInit {
 
   public isAdmin: any = null;
   public userUid: string = null;
+  public userName: string = '';
 
 
   constructor(private dataApi: DataApiService,private authService: AuthService) { }
@@ -34,8 +35,9 @@ export class ListBooksComponent implements OnInit {
     this.authService.isAuth().subscribe(auth => {
       if(auth){
         this.userUid = auth.uid;
+        this.userName = auth.displayName;
         this.authService.isUserAdmin(this.userUid).subscribe( userRole => {
-          this.isAdmin = Object.assign({}, userRole.roles).hasOwnProperty('admin');
+          this.isAdmin = Object.assign({}, userRole.role).hasOwnProperty('ADMIN');
         });
       }
     });

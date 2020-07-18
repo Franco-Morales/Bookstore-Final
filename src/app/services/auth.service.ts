@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from "@angular/fire/auth";
-import { map } from "rxjs/operators";
+import { map, switchMap } from "rxjs/operators";
+
+import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from "@angular/fire/firestore";
-import { UserInterface } from '../models/user';
+
+import { User } from '../models/user.interface';
+import { Observable, of } from 'rxjs';
 
 
 @Injectable({
@@ -11,111 +14,113 @@ import { UserInterface } from '../models/user';
 })
 export class AuthService {
 
+  public user$: Observable<User>;
 
-  constructor(private afsAuth: AngularFireAuth, private afs: AngularFirestore) {}
+  constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) {
+    
+    // this.user$ = this.afAuth.authState.pipe(
+    //   switchMap((user) => {
+    //     if (user) {
+    //       return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
+    //     }
+    //     return of(null);
+    //   })
+    // );
 
-
-  registerUser(email: string, psw: string) {
-    return new Promise( (resolve, reject) => {
-      this.afsAuth.createUserWithEmailAndPassword(email, psw)
-        .then( userData => {
-          resolve(userData),
-          this.updateUserData(userData.user)
-        }).catch( err => console.log( reject(err) ) )
-    });
   }
 
-  async register(email: string, pass: string) {
+  async register(email: string, password: string): Promise<User> {
+    console.log(email, password)
     try {
-      return await this.afsAuth.createUserWithEmailAndPassword(email,pass);
+      const { user } = await this.afAuth.createUserWithEmailAndPassword( email, password );
+      this.updateUserData(user);
+      return user;
     } catch (error) {
-      console.log('error', error)
+      console.log(error);
     }
   }
 
-  loginEmailUser(email: string, pass: string) {
-    return new Promise( (resolve, reject) => {
-      this.afsAuth.signInWithEmailAndPassword(email, pass)
-        .then(userData => resolve(userData),
-          err => reject(err));
-    });
-  }
-
-  async login(email: string,pass: string) {
+  async login(email: string, password: string): Promise<User> {
     try {
-      return await this.afsAuth.signInWithEmailAndPassword(email,pass);
+      const { user } = await this.afAuth.signInWithEmailAndPassword( email, password );
+      this.updateUserData(user);
+      return user;
     } catch (error) {
-      console.log('error', error)
+      console.log(error);
     }
   }
 
-
-  async loginFacebookUser() {
-    try {
-     let credential =  await this.afsAuth.signInWithPopup(new auth.FacebookAuthProvider());
-     console.log('credential', credential);
-    } catch (error) {
-      console.log('error', error)
-    }
+  loginFacebookUser(){
+    return this.afAuth.signInWithPopup(new auth.FacebookAuthProvider())
+    .then(credential=> this.updateUserData(credential.user))
   }
+ loginGoogleUser(){
 
-
-  async loginGoogleUser() {
-    const credential = await this.afsAuth.signInWithPopup(new auth.GoogleAuthProvider());
-    return await this.updateUserData(credential.user);
+   return this.afAuth.signInWithPopup(new auth.GoogleAuthProvider())
+   .then(credential=> this.updateUserData(credential.user))
   }
-
-
-  logoutUser() { return this.afsAuth.signOut(); }
 
   async logout() { 
     try {
-      await this.afsAuth.signOut();
+      await this.afAuth.signOut();
     } catch (error) {
       console.log('error', error)
     }
    }
 
+
   isAuth() {
-    return this.afsAuth.authState.pipe( map( auth => auth ) );
+    return this.afAuth.authState.pipe( map(auth => auth) );
   }
 
-  private updateUserData(user){
-    
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.id}`);
 
-    // Inicializar los usuarios como administradores
-    const data: UserInterface = {
-      id: user.id,
+  // private updateUser(user){
+  //   // console.log('updateUserData:user ', user.uid);
+  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.id}`);
+  //   // Inicializar los usuarios como administradores
+  //   // const data: UserInterface = {
+  //   //   id: user.id,
+  //   //   email: user.email,
+  //   //   roles:{
+  //   //     admin: true
+  //   //   }
+  //   // }
+  //   // Inicializar los usuarios como editor
+  //   // const data: UserInterface = {
+  //   //   id: user.id,
+  //   //   email: user.email,
+  //   //   roles:{
+  //   //     editor: true
+  //   //   }
+  //   // }
+
+  //   const data: User = {
+  //     uid: user.uid,
+  //     email: user.email,
+  //     role:'SUSCRIPTOR'
+  //   }
+
+  //   return userRef.set(data,{merge: true});
+  // }
+
+  private updateUserData(user: User) {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(
+      `users/${user.uid}`
+    );
+
+    const data: User = {
+      uid: user.uid,
       email: user.email,
-      roles:{
-        admin: true
-      }
-    }
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      role: 'USER',
+    };
 
-    // Inicializar los usuarios como editor
-    // const data: UserInterface = {
-    //   id: user.id,
-    //   email: user.email,
-    //   roles:{
-    //     editor: true
-    //   }
-    // }
-
-    // const data: UserInterface = {
-    //   id: user.id,
-    //   email: user.email,
-    //   roles:{
-    //     admin: false
-    //   }
-    // }
-
-    return userRef.set(data,{merge: true});
+    return userRef.set(data, { merge: true });
   }
 
-
-  isUserAdmin(userId){
-    return this.afs.doc<UserInterface>(`users/${userId}`).valueChanges();
+  isUserAdmin(userId: string){
+    return this.afs.doc<User>(`users/${userId}`).valueChanges();
   }
 
 }

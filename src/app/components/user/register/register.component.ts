@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { AngularFireStorage } from "@angular/fire/storage";
 import { finalize } from "rxjs/operators";
 import { Observable } from 'rxjs';
+import {  FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 
 
@@ -14,21 +15,32 @@ import { Observable } from 'rxjs';
 })
 export class RegisterComponent implements OnInit {
 
-  public email: string = '';
-  public psw: string = '';
-  uploadPercet: Observable <number> ;
+  // public email: string = '';
+  // public psw: string = '';
+  regForm: FormGroup;
+
+  uploadPercent: Observable <number> ;
   urlImage: Observable <string> ;
 
-  @ViewChild('imageUser') inputImageUser: ElementRef;
+  @ViewChild('imageUser',{ static: false, }) inputImageUser: ElementRef;
 
 
-  constructor(private router: Router, private authService: AuthService, private storage: AngularFireStorage) {}
+  constructor(private router: Router, private authService: AuthService, private storage: AngularFireStorage, private formBuilder: FormBuilder) {
+    this.buildForm();
+  }
 
   ngOnInit() {}
+  //password = pswd
+  private buildForm(){
+    this.regForm = this.formBuilder.group({
+      userName: ['',[Validators.required]],
+      email: ['',[Validators.required, Validators.email]],
+      pswd: ['',[Validators.required]] 
+    });
+  }
 
   onUpload(e) {
     // console.log('subir',e.target.files[0]);
-
     const id = Math.random().toString(36).substring(2);
     const file = e.target.files[0];
     const filePath = `upload/profile_${id}`;
@@ -36,52 +48,61 @@ export class RegisterComponent implements OnInit {
 
     const task = this.storage.upload(filePath, file);
 
-    this.uploadPercet = task.percentageChanges();
-    task.snapshotChanges().pipe( finalize( ()=> this.urlImage = ref.getDownloadURL() ) ).subscribe();
-
+    this.uploadPercent = task.percentageChanges();
+    task.snapshotChanges().pipe( finalize( () => this.urlImage = ref.getDownloadURL() ) ).subscribe(); 
   }
 
 
-  onAddUser() {
-    this.authService.registerUser(this.email, this.psw)
-      .then((resp) => {
-        this.authService.isAuth().subscribe( user=>{
-          if(user){
+  onAddUser(event: Event) {
+    event.preventDefault();
+    if(this.regForm.valid){
+      this.authService.register(this.regForm.value.email, this.regForm.value.pswd)
+      .then( (resp) => {
+        this.authService.isAuth().subscribe( user => {
+          if(user) {
             user.updateProfile({
-              displayName: '',
+              displayName: this.regForm.value.userName,
               photoURL: this.inputImageUser.nativeElement.value
-            }).then( () =>{ 
-              this.router.navigate(['/home']);
-            }).catch( (error)=> { console.log('Error : ',error); });
+            })
+            .then( (data) => {console.log('data', data); this.onRegisterRedirect()} )
+            .catch( (error) => console.log('error : ',error) );
           }
         });
-      }).catch(err => console.log('Error :', err.message));
+      } )
+      .catch(err => console.log('Error :', err.message));
+    } else {
+      this.regForm.markAllAsTouched();
+    }
   }
 
-  /**
-   * Login por Google
-   */
-  onLoginGoogle(): void {
+  onLoginGoogle():void{
     this.authService.loginGoogleUser()
-      .then((resp) => {
-        this.onLoginRedirect();
-      }).catch(err => console.log('err', err.message));
-
+    .then((res)=>{
+      this.onRegisterRedirect();
+    }).catch(err => console.log("err",err.message));
+    
   }
 
-  /**
-   * Login por Facebook
-   */
-  onLoginFacebook() {
+  onLoginFacebook(): void{
     this.authService.loginFacebookUser()
-    .then((resp)=>{
-      this.onLoginRedirect();
-    }).catch( err=> console.log('err',err.message));
+    .then((res)=>{
+      this.onRegisterRedirect();
+    }).catch( err => console.log("err",err.message));
   }
 
-  onLoginRedirect(): void {
-    // this.router.navigate(['admin/list-book']);
+  onRegisterRedirect(): void {
     this.router.navigate(['/user/profile']);
   }
 
+
+  //Solo para las validaciones
+  get emailField(){
+    return this.regForm.get('email');
+  }
+  get pswdField(){
+    return this.regForm.get('pswd');
+  }
+  get nameField(){
+    return this.regForm.get('userName');
+  }
 }

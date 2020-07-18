@@ -7,53 +7,62 @@
         <div class="card_register">
           <div class="card">
             <div class="card-body text-center">
-              <form #formRegister="ngForm" (ngSubmit)="onAddUser()">
+              <form  [formGroup]="regForm" novalidate (ngSubmit)="onAddUser($event)">
                 <h1 class="h3 mb-3 font-weight-normal">Register</h1>
-                <!-- <div class="alert alert-danger" role="alert" *ngIf="isError">
-                  {{msgError}}
-                </div> -->
+
                 <div class="form-group">
-                  <input type="email" name="email" class="form-control" placeholder="Email" [(ngModel)]="email" required minlength="8">
+                  <input type="text" name="userName" formControlName='userName' class="form-control" placeholder="Username">
+                  <div class="alert alert-danger mt-3" role="alert" *ngIf="nameField.touched && nameField.errors $$ nameField.valid">
+                    <div *ngIf="nameField.hasError('required')">Username is required</div>
+                  </div>
                 </div>
-                <!-- <div class="alert alert-danger" role="alert" *ngIf="email.touched && !email.valid">
-                  <div *ngIf="email.errors.required">Email is required</div>
-                  <div *ngIf="email.errors.minlength">Email must be at least 8 characters</div>
-                </div> -->
+
                 <div class="form-group">
-                  <input type="password" name="psw" class="form-control" placeholder="Password"
-                    [(ngModel)]="psw" required minlength="5" maxlength="10">
+                  <input type="email" name="email" formControlName='email' class="form-control" placeholder="Email">
+                  <div class="alert alert-danger mt-3" role="alert" *ngIf="emailField.touched && emailField.errors $$ emailField.valid">
+                    <div *ngIf="emailField.hasError('required')">Email is required</div>
+                    <div *ngIf="emailField.hasError('email')">Must be a valid email</div>
+                  </div>
                 </div>
-                <!-- <div class="alert alert-danger" role="alert" *ngIf="password.touched && !password.valid">
-                  <div *ngIf="password.errors.required">Password is required</div>
-                  <div *ngIf="password.errors.minlength">Password must be at least 5 characters</div>
-                </div> -->
+
+                <div class="form-group">
+                  <input type="password" id="password" name="pswd" formControlName='pswd' class="form-control" placeholder="Password">
+                  <div class="alert alert-danger mt-3" role="alert" *ngIf="pswdField.touched && pswdField.errors">
+                    <div *ngIf="pswdField.hasError('required')">Passwors is required</div>
+                  </div>
+                </div>
+                
                 <hr>
+
                 <div class="form-group">
                   <h5>Seleccionar imagen: </h5>
                   <input type="file" accept=".png,.jpg" (change)="onUpload($event)">
                 </div>
                 <div class="progress mb-3">
-                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width]="(uploadPercet | async)"></div>
+                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width]="(uploadPercent | async) + '%'"></div>
                 </div>
-                <input id="imageUser" type="hidden" [value]="urlImage | async">
+
+                <input #imageUser type="hidden" [value]="urlImage | async">
 
                 <button *ngIf="urlImage | async; else btnDisabled" type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
 
                 <ng-template #btnDisabled>
-                  <button type="submit" class="btn btn-lg btn-secondary btn-block" disabled=true >Register</button>
+                  <button type="submit" class="btn btn-lg btn-secondary btn-block" disabled='true'>Register</button>
                 </ng-template>
+
                 <div class="form-group">
                   <a routerLink="/user/login" class="form-control login-user">Do you have account?</a>
                 </div>
+                
                 <div class="form-group">
-                  <a  class="btn btn-block btn-social btn-facebook">
+                  <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()" type="button">
                     <span class="fa fa-facebook"></span>
                     Facebook
-                  </a>
-                  <a href="#" class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">
+                  </button>
+                  <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()" type="button">
                     <span class="fa fa-google"></span>
                     Google
-                  </a>
+                  </button>
                 </div>
               </form>
             </div>

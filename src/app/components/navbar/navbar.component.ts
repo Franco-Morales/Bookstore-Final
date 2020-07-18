@@ -13,16 +13,18 @@ export class NavbarComponent implements OnInit {
 
   public app_name: string = 'BookStore';
   public isLogged: boolean = false;
-  
+  public name: string = '';
+
   ngOnInit() {
     this.getCurrentUser();
   }
 
   getCurrentUser(){
-    this.authService.isAuth().subscribe( auth=>{
+    this.authService.isAuth().subscribe( auth => {
       if(auth){
         console.log('User Logged');
         this.isLogged = true;
+        this.name = auth.displayName;
       } else {
         console.log('User not logged');
         this.isLogged = false;
