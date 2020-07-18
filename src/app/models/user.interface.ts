@@ -1,21 +1,6 @@
 
-// export interface Roles {
-//     editor?: boolean;
-//     admin?: boolean;
-// }
 
-
-// export interface UserInterface {
-//     id?: string;
-//     name?: string;
-//     email?: string;
-//     pwd?: string;
-//     photoUrl?: string;
-
-//     roles: Roles;
-// }
-
-export type Roles = 'USER' | 'EDITOR' | 'ADMIN';
+export type Roles = 'EDITOR' | 'ADMIN';
 
 export interface User {
   uid?: string;

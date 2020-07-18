@@ -17,8 +17,8 @@ export class ListBooksComponent implements OnInit {
 
   public books: BookInterface[];
 
-  public isAdmin: any = null;
-  public userUid: string = null;
+  public isAdmin: boolean = false;
+  public userUid: string = '';
   public userName: string = '';
 
 
@@ -28,6 +28,7 @@ export class ListBooksComponent implements OnInit {
   ngOnInit(): void {
     this.getCurrentUser();
     this.getListBooks();
+    console.log(this.isAdmin)
   }
 
 
@@ -37,7 +38,7 @@ export class ListBooksComponent implements OnInit {
         this.userUid = auth.uid;
         this.userName = auth.displayName;
         this.authService.isUserAdmin(this.userUid).subscribe( userRole => {
-          this.isAdmin = Object.assign({}, userRole.role).hasOwnProperty('ADMIN');
+          this.isAdmin = userRole.role === 'ADMIN';
         });
       }
     });

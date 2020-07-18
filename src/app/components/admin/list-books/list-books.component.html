@@ -37,7 +37,7 @@
             <td>{{book.idioma}}</td>
             <td>{{book.precio}}</td>
             <td>{{book.oferta == 1 ? 'Si' : 'No'}}</td>
-            <td *ngIf="book.userUid == userUid || isAdmin == true; else noOwner">
+            <td *ngIf="book.userUid === userUid || isAdmin === true; else noOwner">
               <button class="btn btn-primary" data-target="#modalBook" data-toggle="modal"
                 (click)="onPreUpdateBook(book)">Update</button>
             </td>
@@ -48,7 +48,7 @@
               </td>
             </ng-template>
   
-            <td *ngIf="isAdmin == true; else noAdmin">
+            <td *ngIf="isAdmin === true; else noAdmin">
               <button class="btn btn-danger" (click)="onDeleteBook(book.id)">Delete</button>
             </td>
   

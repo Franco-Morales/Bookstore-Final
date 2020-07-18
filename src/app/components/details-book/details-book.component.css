@@ -1,3 +1,6 @@
+section#book{
+    margin-top: 10% !important;
+}
 p.card-text{
     text-align: justify;
 }

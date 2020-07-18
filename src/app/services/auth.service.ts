@@ -17,7 +17,6 @@ export class AuthService {
   public user$: Observable<User>;
 
   constructor(public afAuth: AngularFireAuth, private afs: AngularFirestore) {
-    
     // this.user$ = this.afAuth.authState.pipe(
     //   switchMap((user) => {
     //     if (user) {
@@ -26,7 +25,6 @@ export class AuthService {
     //     return of(null);
     //   })
     // );
-
   }
 
   async register(email: string, password: string): Promise<User> {
@@ -73,36 +71,6 @@ export class AuthService {
     return this.afAuth.authState.pipe( map(auth => auth) );
   }
 
-
-  // private updateUser(user){
-  //   // console.log('updateUserData:user ', user.uid);
-  //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.id}`);
-  //   // Inicializar los usuarios como administradores
-  //   // const data: UserInterface = {
-  //   //   id: user.id,
-  //   //   email: user.email,
-  //   //   roles:{
-  //   //     admin: true
-  //   //   }
-  //   // }
-  //   // Inicializar los usuarios como editor
-  //   // const data: UserInterface = {
-  //   //   id: user.id,
-  //   //   email: user.email,
-  //   //   roles:{
-  //   //     editor: true
-  //   //   }
-  //   // }
-
-  //   const data: User = {
-  //     uid: user.uid,
-  //     email: user.email,
-  //     role:'SUSCRIPTOR'
-  //   }
-
-  //   return userRef.set(data,{merge: true});
-  // }
-
   private updateUserData(user: User) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `users/${user.uid}`
@@ -113,7 +81,7 @@ export class AuthService {
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
-      role: 'USER',
+      role: 'EDITOR',
     };
 
     return userRef.set(data, { merge: true });

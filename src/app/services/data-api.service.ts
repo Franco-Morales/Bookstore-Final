@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore,AngularFirestoreCollection,AngularFirestoreDocument } from "@angular/fire/firestore";
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from "@angular/fire/firestore";
 import { BookInterface } from "../models/book";
 import { Observable } from 'rxjs';
 import { map } from "rxjs/operators";
-import { promise } from 'protractor';
 
 
 @Injectable({
@@ -15,6 +14,7 @@ export class DataApiService {
   private books: Observable<BookInterface[]>;
   private bookDoc: AngularFirestoreDocument<BookInterface>;
   private book: Observable<BookInterface>;
+
   public selectedBook: BookInterface = { id:null };
 
 
@@ -48,13 +48,14 @@ export class DataApiService {
 
 
   getOneBook(idBook: string){
+    this.bookDoc = this.afs.doc<BookInterface>(`books/${idBook}`);
     return this.book = this.bookDoc.snapshotChanges().pipe( map( action => {
-      if(action.payload.exists == false){
-        return null;
-      } else{
+      if(action.payload.exists != false){
         const data = action.payload.data() as BookInterface;
         data.id = action.payload.id;
         return data;
+      } else{
+        return null;
       }
     }));
   }
