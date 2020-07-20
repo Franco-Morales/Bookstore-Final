@@ -15,7 +15,6 @@ export class ModalComponent implements OnInit {
   @ViewChild('btnClose') btnClose: ElementRef;
   @Input() userUid: string;
 
-
   constructor(public dataApi: DataApiService) { }
 
 

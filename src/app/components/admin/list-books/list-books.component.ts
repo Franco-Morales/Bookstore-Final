@@ -17,10 +17,9 @@ export class ListBooksComponent implements OnInit {
 
   public books: BookInterface[];
 
-  public isAdmin: boolean = false;
+  public isAdmin: boolean;
   public userUid: string = '';
   public userName: string = '';
-
 
   constructor(private dataApi: DataApiService,private authService: AuthService) { }
 
@@ -28,7 +27,6 @@ export class ListBooksComponent implements OnInit {
   ngOnInit(): void {
     this.getCurrentUser();
     this.getListBooks();
-    console.log(this.isAdmin)
   }
 
 

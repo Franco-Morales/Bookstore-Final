@@ -7,7 +7,7 @@
         </div>
         <div class="row user-details">
           <div class="col-12">
-            <img src="{{user.photoURL}}" class="rounded-circle img-thumbnail mt-3 mb-3" alt="profile">
+            <img src="{{user.photoURL}}" class="rounded-circle img-thumbnail my-3 box_shadow" alt="{{user.displayName}}_profile_picture">
             <h5 *ngIf="providerId != 'password'">{{user.displayName}}</h5>
             <p>{{user.email}}</p>
             <hr>

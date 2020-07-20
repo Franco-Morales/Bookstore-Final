@@ -1,7 +1,8 @@
 .form-control.login-user {
   border: 0px solid #fff !important;
 }
-.btn-social{
+
+.btn-social {
   position: relative;
   text-align: center;
   white-space: nowrap;
@@ -9,18 +10,22 @@
   /* text-overflow: ellipsis; */
   text-decoration: none;
   color: #fff;
-  border-color: rgba(0,0,0,0.2);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
-.btn-facebook{
+.btn-facebook {
   background-color: #3b5998;
 }
-.btn-google{
+
+.btn-google {
   background-color: #dd4b39;
 
 }
 
-
-div.card_register{
+div.card_register {
   margin-top: 25% !important;
+}
+
+div.box_shadow {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24) !important;
 }

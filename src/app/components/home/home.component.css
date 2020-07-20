@@ -1,3 +1,11 @@
+body {
+  background: #e2e1e0;
+}
+
 section#books {
-    margin-top: 10% !important;
+  margin-top: 10% !important;
+}
+
+div.box_shadow {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23) !important;
 }
