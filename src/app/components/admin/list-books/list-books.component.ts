@@ -17,9 +17,10 @@ export class ListBooksComponent implements OnInit {
 
   public books: BookInterface[];
 
-  public isAdmin: boolean;
+  public isAdmin: boolean = false;
   public userUid: string = '';
   public userName: string = '';
+  public bookUid: string = '';
 
   constructor(private dataApi: DataApiService,private authService: AuthService) { }
 

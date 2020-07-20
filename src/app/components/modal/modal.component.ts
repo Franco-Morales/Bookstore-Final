@@ -32,5 +32,4 @@ export class ModalComponent implements OnInit {
     bookForm.resetForm();
     this.btnClose.nativeElement.click();
   }
-
 }

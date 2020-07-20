@@ -64,12 +64,12 @@ export class RegisterComponent implements OnInit {
               displayName: this.regForm.value.userName,
               photoURL: this.inputImageUser.nativeElement.value
             })
-            .then( (data) => {console.log('data', data); this.onRegisterRedirect()} )
-            .catch( (error) => console.log('error : ',error) );
+            .then( (data) =>  this.onRegisterRedirect() )
+            .catch( (error) => console.log(`error : ${error.message}`) );
           }
         });
       } )
-      .catch(err => console.log('Error :', err.message));
+      .catch(error => console.log(`error : ${error.message}`));
     } else {
       this.regForm.markAllAsTouched();
     }
@@ -77,17 +77,15 @@ export class RegisterComponent implements OnInit {
 
   onLoginGoogle():void{
     this.authService.loginGoogleUser()
-    .then((res)=>{
-      this.onRegisterRedirect();
-    }).catch(err => console.log("err",err.message));
+      .then((res)=> this.onRegisterRedirect() )
+      .catch(error => console.log(`error : ${error.message}`));
     
   }
 
   onLoginFacebook(): void{
     this.authService.loginFacebookUser()
-    .then((res)=>{
-      this.onRegisterRedirect();
-    }).catch( err => console.log("err",err.message));
+      .then((res)=> this.onRegisterRedirect() )
+      .catch( error => console.log(`error : ${error.message}`));
   }
 
   onRegisterRedirect(): void {

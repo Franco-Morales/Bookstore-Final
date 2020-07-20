@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid){
         this.authService.login(this.loginForm.value.email,this.loginForm.value.pswd)
           .then( res => this.onLoginRedirect())
-          .catch( error => console.log('error', error))
+          .catch( error => console.log(`error : ${error.message}`))
     } else {
       this.loginForm.markAllAsTouched();
     }
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
       .then((res)=>{
         this.onLoginRedirect();
       })
-      .catch( error => console.log("err",error));
+      .catch( error => console.log(`error : ${error.message}`));
     
   }
 
@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
       .then((res)=>{
         this.onLoginRedirect();
       })
-      .catch( error => console.log("err",error));
+      .catch( error => console.log(`error : ${error.message}`));
   }
 
   
