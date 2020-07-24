@@ -34,12 +34,12 @@ export class LoginComponent implements OnInit {
       pswd: ['',[Validators.required]] //password
     });
   }
+  
   /**
    * Login por Email y Contraseña
    */
   onLogin(event: Event){
     event.preventDefault();
-
     if(this.loginForm.valid){
         this.authService.login(this.loginForm.value.email,this.loginForm.value.pswd)
           .then( res => this.onLoginRedirect())

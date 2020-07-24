@@ -13,7 +13,7 @@
 
                 <div class="form-group">
                   <input type="email" id="email" name="email" formControlName='email' class="form-control" placeholder="Email">
-                  <div class="alert alert-danger mt-3" role="alert" *ngIf="emailField.touched && emailField.errors $$ emailField.valid">
+                  <div class="alert alert-danger mt-3" role="alert" *ngIf="emailField.touched && emailField.errors">
                     <div *ngIf="emailField.hasError('required')">Email is required</div>
                     <div *ngIf="emailField.hasError('email')">Must be a valid email</div>
                   </div>
